@@ -15,6 +15,7 @@ fn main() {
     let public_path=env::var("PUBLIC_PATH").unwrap_or(default_path);
     let get=Method::GET;
     println!("Starting server");
+    println!("Starting server");
     let server=Server::new("127.0.01:8080".to_string());
     server.run(WebsiteHandler::new(public_path));
 }   
