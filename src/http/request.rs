@@ -5,6 +5,10 @@ use std::str;
 use std::error::Error;
 use std::convert::TryFrom;
 use std::fmt::{Display,Result as FmtResult,Formatter,Debug};
+
+const PROTOCOL_HTTP_11: &str = "HTTP/1.1";
+const PATH_QUERY_SEPARATOR: char = '?';
+
 #[derive(Debug)]
 pub struct Request<'buf>{
     path:&'buf str,
@@ -37,12 +41,12 @@ impl<'buf> TryFrom<&'buf [u8]> for Request<'buf>{
         let (method,request)=get_next_word(request).ok_or(parse_error::InvalidRequest)?;
         let (mut path,request)=get_next_word(request).ok_or(parse_error::InvalidRequest)?;
         let (protocol,_)=get_next_word(request).ok_or(parse_error::InvalidRequest)?;
-        if protocol!="HTTP/1.1" {
+        if protocol != PROTOCOL_HTTP_11 {
             return Err(parse_error::InvalidProtocol);
         }
         let method:Method=method.parse()?;
         let mut query_string=None;
-        if let Some(i)=path.find('?'){
+        if let Some(i)=path.find(PATH_QUERY_SEPARATOR){
             query_string=Some(QueryString::from(&path[i + 1..]));
             path=&path[..i];
         }
