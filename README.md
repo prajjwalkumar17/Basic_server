@@ -4,10 +4,22 @@ OSS equivalent
 
 ## Curl smoke tests
 
-Run the script below to quickly verify server responses end-to-end:
+Run from repo root:
+
+```bash
+cargo run
+```
+
+In another terminal run:
 
 ```bash
 ./scripts/test-curls.sh
+```
+
+Or run everything in one shot:
+
+```bash
+bash ./scripts/test-curls.sh
 ```
 
 The script starts the server, checks:
