@@ -31,15 +31,7 @@ impl<'buf> Request<'buf> {
 impl<'buf> TryFrom<&'buf [u8]> for Request<'buf> {
     type Error = parse_error;
     fn try_from(buf: &'buf [u8]) -> Result<Self, Self::Error> {
-        // match str::from_utf8(buf){
-        //     Ok()->{},
-        //     Err(_)=>return Err(parse_error::InvalidEncoding)
-        // }
         let request = str::from_utf8(buf)?;
-        // match get_next_word(request){
-        //     Some((method,request))=>{},
-        //     None=>parse_error::InvalidRequest
-        // }
         let (method, request) = get_next_word(request).ok_or(parse_error::InvalidRequest)?;
         let (mut path, request) = get_next_word(request).ok_or(parse_error::InvalidRequest)?;
         let (protocol, _) = get_next_word(request).ok_or(parse_error::InvalidRequest)?;
