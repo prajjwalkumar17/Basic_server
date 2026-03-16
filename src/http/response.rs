@@ -1,4 +1,4 @@
-use super::StatusCode;
+use super::{constants::HTTP_VERSION, StatusCode};
 use std::io::{Result as IOResult, Write};
 
 #[derive(Debug)]
@@ -22,7 +22,8 @@ impl Response {
         };
         write!(
             stream,
-            "HTTP/1.1 {} {}\r\n\n{}",
+            "{} {} {}\r\n\n{}",
+            HTTP_VERSION,
             self.status_code,
             self.status_code.reason_phrase(),
             body

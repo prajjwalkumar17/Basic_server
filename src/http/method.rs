@@ -1,3 +1,4 @@
+use super::constants::{METHOD_CONNECT, METHOD_DELETE, METHOD_GET, METHOD_HEAD, METHOD_OPTIONS, METHOD_PATCH, METHOD_POST, METHOD_PUT, METHOD_TRACE};
 use std::fmt::{Display, Formatter, Result as FmtResult};
 use std::str::FromStr;
 
@@ -19,15 +20,15 @@ impl FromStr for Method {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "GET" => Ok(Method::GET),
-            "DELETE" => Ok(Method::DELETE),
-            "POST" => Ok(Method::POST),
-            "PUT" => Ok(Method::PUT),
-            "HEAD" => Ok(Method::HEAD),
-            "CONNECT" => Ok(Method::CONNECT),
-            "OPTIONS" => Ok(Method::OPTIONS),
-            "TRACE" => Ok(Method::TRACE),
-            "PATCH" => Ok(Method::PATCH),
+            METHOD_GET => Ok(Method::GET),
+            METHOD_DELETE => Ok(Method::DELETE),
+            METHOD_POST => Ok(Method::POST),
+            METHOD_PUT => Ok(Method::PUT),
+            METHOD_HEAD => Ok(Method::HEAD),
+            METHOD_CONNECT => Ok(Method::CONNECT),
+            METHOD_OPTIONS => Ok(Method::OPTIONS),
+            METHOD_TRACE => Ok(Method::TRACE),
+            METHOD_PATCH => Ok(Method::PATCH),
             _ => Err(method_error),
         }
     }
@@ -36,15 +37,15 @@ impl FromStr for Method {
 impl Display for Method {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         match self {
-            Self::GET => write!(f, "GET"),
-            Self::DELETE => write!(f, "DELETE"),
-            Self::POST => write!(f, "POST"),
-            Self::PUT => write!(f, "PUT"),
-            Self::HEAD => write!(f, "HEAD"),
-            Self::CONNECT => write!(f, "CONNECT"),
-            Self::OPTIONS => write!(f, "OPTIONS"),
-            Self::TRACE => write!(f, "TRACE"),
-            Self::PATCH => write!(f, "PATCH"),
+            Self::GET => write!(f, "{}", METHOD_GET),
+            Self::DELETE => write!(f, "{}", METHOD_DELETE),
+            Self::POST => write!(f, "{}", METHOD_POST),
+            Self::PUT => write!(f, "{}", METHOD_PUT),
+            Self::HEAD => write!(f, "{}", METHOD_HEAD),
+            Self::CONNECT => write!(f, "{}", METHOD_CONNECT),
+            Self::OPTIONS => write!(f, "{}", METHOD_OPTIONS),
+            Self::TRACE => write!(f, "{}", METHOD_TRACE),
+            Self::PATCH => write!(f, "{}", METHOD_PATCH),
         }
     }
 }

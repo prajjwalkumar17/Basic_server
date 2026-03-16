@@ -1,10 +1,16 @@
-use super::method::{method_error, Method};
-use super::QueryString;
-use std::convert::TryFrom;
-use std::error::Error;
-use std::fmt::{Debug, Display, Formatter, Result as FmtResult};
-use std::str;
-use std::str::Utf8Error;
+use super::{
+    constants::HTTP_VERSION,
+    method::{method_error, Method},
+    QueryString,
+};
+use std::{
+    convert::TryFrom,
+    error::Error,
+    fmt::{Debug, Display, Formatter, Result as FmtResult},
+    str,
+    str::Utf8Error,
+};
+
 #[derive(Debug)]
 pub struct Request<'buf> {
     path: &'buf str,
@@ -37,7 +43,7 @@ impl<'buf> TryFrom<&'buf [u8]> for Request<'buf> {
         let (method, request) = get_next_word(request).ok_or(parse_error::InvalidRequest)?;
         let (mut path, request) = get_next_word(request).ok_or(parse_error::InvalidRequest)?;
         let (protocol, _) = get_next_word(request).ok_or(parse_error::InvalidRequest)?;
-        if protocol != "HTTP/1.1" {
+        if protocol != HTTP_VERSION {
             return Err(parse_error::InvalidProtocol);
         }
         let method: Method = method.parse()?;
