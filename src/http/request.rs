@@ -78,8 +78,10 @@ impl From<Utf8Error> for parse_error{
     }
 }
 fn get_next_word(request:&str)->Option<(&str,&str)>{
-    for(i,char) in request.chars().enumerate(){
-        if char==' ' || char=='\r' { return Some((&request[..i],&request[i+1..]))};
+    for (i, char) in request.char_indices() {
+        if char == ' ' || char == '\r' {
+            return Some((&request[..i], &request[i + 1..]));
+        }
     }
     None
 }
