@@ -1,5 +1,8 @@
 # Basic Server
 
+[![Rust](https://img.shields.io/badge/rust-edition%202021-orange.svg)](https://www.rust-lang.org/)
+[![Dependencies](https://img.shields.io/badge/dependencies-zero-blue.svg)](https://doc.rust-lang.org/std/)
+
 A minimal HTTP/1.1 server built from scratch in Rust — no frameworks, no dependencies, just the standard library.
 
 ## Features
@@ -15,24 +18,31 @@ A minimal HTTP/1.1 server built from scratch in Rust — no frameworks, no depen
 ## Project Structure
 
 ```
-├── Cargo.toml
+├── Cargo.toml              # Workspace definition
+├── crates/
+│   ├── basic_server/       # Binary entry point
+│   │   ├── Cargo.toml
+│   │   └── src/
+│   │       └── main.rs     # Server startup & WebsiteHandler
+│   └── basic_server_lib/   # Library
+│       ├── Cargo.toml
+│       └── src/
+│           ├── lib.rs
+│           ├── server.rs   # TCP listener & connection handling
+│           ├── handler.rs  # Handler trait
+│           └── http/
+│               ├── mod.rs          # Public re-exports
+│               ├── method.rs       # HTTP method enum (GET, etc.)
+│               ├── request.rs      # Request parsing from raw bytes
+│               ├── response.rs     # Response construction & sending
+│               ├── query_string.rs # Query string parsing
+│               └── status_code.rs  # Status codes (200, 400, 404)
 ├── public/
-│   ├── index.html       # Served at /
+│   ├── index.html          # Served at /
 │   ├── hello.html
-│   └── style.css        # Served at /style.css
-├── scripts/
-│   └── test-curls.sh    # Automated endpoint tests
-└── src/
-    ├── main.rs              # Entry point, configures server
-    ├── server.rs            # TCP listener & connection handling
-    ├── website_handler.rs   # Route logic & static file serving
-    └── http/
-        ├── mod.rs           # Public re-exports
-        ├── method.rs        # HTTP method enum (GET, etc.)
-        ├── request.rs       # Request parsing from raw bytes
-        ├── response.rs      # Response construction & sending
-        ├── query_string.rs  # Query string parsing
-        └── status_code.rs   # Status codes (200, 400, 404)
+│   └── style.css           # Served at /style.css
+└── scripts/
+    └── test-curls.sh       # Automated endpoint tests
 ```
 
 ## Getting Started
@@ -59,45 +69,36 @@ PUBLIC_PATH=/path/to/static/files cargo run
 
 ## API Endpoints
 
-| Method | Path      | Description                        | Status |
-|--------|-----------|------------------------------------|--------|
-| GET    | `/`       | Serves `public/index.html`         | 200    |
-| GET    | `/hello`  | Returns a greeting message         | 200    |
-| GET    | `/*`      | Serves matching file from `public/` | 200/404 |
-| *      | `/*`      | All other methods                  | 404    |
+| Method | Path     | Description                          | Status     |
+|--------|----------|--------------------------------------|------------|
+| GET    | `/`      | Serves `public/index.html`           | 200        |
+| GET    | `/hello` | Returns `<h1>Hello there!</h1>`      | 200        |
+| GET    | `/*`     | Serves matching file from `public/`  | 200 or 404 |
+| *      | `/*`     | All other methods                    | 404        |
 
 ### Example Requests
 
 ```bash
-# Homepage
+# Homepage - serves index.html
 curl http://127.0.0.1:8080/
 
-# Hello endpoint
+# Hello endpoint - hardcoded greeting
 curl http://127.0.0.1:8080/hello
 
 # Static file
 curl http://127.0.0.1:8080/style.css
 
-# Query string support
-curl "http://127.0.0.1:8080/hello?name=world"
-
 # 404 for missing routes
-curl http://127.0.0.1:8080/does-not-exist
+curl -i http://127.0.0.1:8080/does-not-exist
 ```
 
 ## Testing
 
-Run the automated curl smoke tests (starts the server, tests all endpoints, cleans up):
+Run the automated curl smoke tests:
 
 ```bash
 bash ./scripts/test-curls.sh
 ```
-
-The script validates:
-- `/` returns 200 with index page content
-- `/hello` returns 200 with greeting
-- `/style.css` returns 200 with CSS content
-- Missing routes return 404
 
 ## License
 
