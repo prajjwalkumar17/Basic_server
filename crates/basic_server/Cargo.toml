@@ -5,3 +5,5 @@ edition = "2021"
 
 [dependencies]
 basic_server_lib = { path = "../basic_server_lib" }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["time", "local-time"] }

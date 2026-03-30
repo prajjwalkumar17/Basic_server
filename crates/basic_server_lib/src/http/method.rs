@@ -1,5 +1,6 @@
 //! HTTP request methods
 
+use std::fmt::{Display, Formatter, Result as FmtResult};
 use std::str::FromStr;
 
 /// HTTP request methods
@@ -14,6 +15,22 @@ pub enum Method {
     OPTIONS,
     TRACE,
     PATCH,
+}
+
+impl Display for Method {
+    fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
+        match self {
+            Method::GET => write!(f, "GET"),
+            Method::DELETE => write!(f, "DELETE"),
+            Method::POST => write!(f, "POST"),
+            Method::PUT => write!(f, "PUT"),
+            Method::HEAD => write!(f, "HEAD"),
+            Method::CONNECT => write!(f, "CONNECT"),
+            Method::OPTIONS => write!(f, "OPTIONS"),
+            Method::TRACE => write!(f, "TRACE"),
+            Method::PATCH => write!(f, "PATCH"),
+        }
+    }
 }
 
 impl FromStr for Method {

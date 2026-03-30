@@ -17,6 +17,11 @@ impl Response {
         Response { status_code, body }
     }
 
+    /// Get the status code of this response
+    pub fn status_code(&self) -> StatusCode {
+        self.status_code
+    }
+
     /// Send the response over the provided stream
     pub fn send(&self, stream: &mut impl Write) -> IOResult<()> {
         let body = match &self.body {

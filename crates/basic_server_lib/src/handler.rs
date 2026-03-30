@@ -1,5 +1,7 @@
 //! Request handler trait
 
+use tracing::warn;
+
 use crate::http::{ParseError, Request, Response, StatusCode};
 
 /// Trait for handling HTTP requests
@@ -9,7 +11,7 @@ pub trait Handler {
 
     /// Handle a malformed request
     fn handle_bad_request(&mut self, e: &ParseError) -> Response {
-        println!("Error parsing request: {}", e);
+        warn!(error = %e, "Handling bad request");
         Response::new(StatusCode::BadRequest, None)
     }
 }
