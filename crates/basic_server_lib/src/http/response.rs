@@ -5,6 +5,12 @@ use std::io::{Result as IOResult, Write};
 
 use super::StatusCode;
 
+/// HTTP header separator
+const HEADER_SEPARATOR: &str = ": ";
+
+/// HTTP line ending
+const CRLF: &str = "\r\n";
+
 /// HTTP Response
 #[derive(Debug)]
 pub struct Response {
@@ -44,7 +50,7 @@ impl Response {
         // Build headers string
         let headers_str: String = self.headers
             .iter()
-            .map(|(k, v)| format!("{}: {}\r\n", k, v))
+            .map(|(k, v)| format!("{}{HEADER_SEPARATOR}{}{CRLF}", k, v))
             .collect();
         
         write!(
