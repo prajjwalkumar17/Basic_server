@@ -66,6 +66,9 @@ impl Server {
                             let status = response.status_code();
                             let status_code: u16 = status.into();
                             
+                            // Add X-Request-Id header to response
+                            let response = response.with_header("X-Request-Id", request_id.clone());
+                            
                             // Log at appropriate level based on status code
                             if status_code >= 500 {
                                 error!(
