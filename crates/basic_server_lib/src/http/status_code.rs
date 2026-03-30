@@ -21,6 +21,12 @@ impl StatusCode {
     }
 }
 
+impl From<StatusCode> for u16 {
+    fn from(status: StatusCode) -> u16 {
+        status as u16
+    }
+}
+
 impl Display for StatusCode {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         write!(f, "{}", *self as u16)

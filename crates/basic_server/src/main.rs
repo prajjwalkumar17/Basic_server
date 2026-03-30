@@ -5,6 +5,9 @@
 use std::env;
 use std::fs;
 
+use tracing::{info, warn};
+use tracing_subscriber::fmt::time::LocalTime;
+
 use basic_server_lib::{Handler, Method, Request, Response, Server, StatusCode};
 
 /// Website handler that serves static files
@@ -26,9 +29,10 @@ impl WebsiteHandler {
                 if canonical_path.starts_with(&self.public_path) {
                     fs::read_to_string(canonical_path).ok()
                 } else {
-                    println!(
-                        "Directory traversal attack detected! Path: {}",
-                        file_path
+                    warn!(
+                        requested_path = %file_path,
+                        resolved_path = ?canonical_path,
+                        "Directory traversal attempt blocked"
                     );
                     None
                 }
@@ -58,6 +62,14 @@ impl Handler for WebsiteHandler {
 }
 
 fn main() {
+    // Initialize tracing subscriber with local time formatting
+    tracing_subscriber::fmt()
+        .with_timer(LocalTime::rfc_3339())
+        .with_target(false)
+        .with_file(true)
+        .with_line_number(true)
+        .init();
+
     // Default to the public directory at the workspace root
     let default_path = format!(
         "{}/../../public",
@@ -65,7 +77,12 @@ fn main() {
     );
     let public_path = env::var("PUBLIC_PATH").unwrap_or(default_path);
 
-    println!("Starting server");
+    info!(
+        public_path = %public_path,
+        bind_address = "127.0.0.1:8080",
+        "Starting HTTP server"
+    );
+    
     let server = Server::new("127.0.0.1:8080".to_string());
     server.run(WebsiteHandler::new(public_path));
 }
