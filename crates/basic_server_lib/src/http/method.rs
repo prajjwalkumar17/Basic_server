@@ -129,6 +129,60 @@ mod tests {
         assert!("get".parse::<Method>().is_err());
     }
 
+    // Noob test cases - basic edge cases
+
+    #[test]
+    fn test_method_from_str_empty() {
+        assert!("".parse::<Method>().is_err());
+    }
+
+    #[test]
+    fn test_method_from_str_whitespace() {
+        assert!(" ".parse::<Method>().is_err());
+        assert!("  ".parse::<Method>().is_err());
+    }
+
+    #[test]
+    fn test_method_from_str_mixed_case() {
+        assert!("Get".parse::<Method>().is_err());
+        assert!("PoSt".parse::<Method>().is_err());
+        assert!("GeT".parse::<Method>().is_err());
+        assert!("delete".parse::<Method>().is_err());
+    }
+
+    #[test]
+    fn test_method_from_str_numeric() {
+        assert!("123".parse::<Method>().is_err());
+        assert!("GET1".parse::<Method>().is_err());
+        assert!("1GET".parse::<Method>().is_err());
+    }
+
+    #[test]
+    fn test_method_from_str_special_chars() {
+        assert!("GET!".parse::<Method>().is_err());
+        assert!("@GET".parse::<Method>().is_err());
+        assert!("GET-POST".parse::<Method>().is_err());
+    }
+
+    #[test]
+    fn test_method_from_str_with_leading_trailing_space() {
+        assert!(" GET".parse::<Method>().is_err());
+        assert!("GET ".parse::<Method>().is_err());
+        assert!(" GET ".parse::<Method>().is_err());
+    }
+
+    #[test]
+    fn test_method_from_str_long_string() {
+        let long_string = "A".repeat(1000);
+        assert!(long_string.parse::<Method>().is_err());
+    }
+
+    #[test]
+    fn test_method_from_str_unicode() {
+        assert!("GÉT".parse::<Method>().is_err());
+        assert!("Gët".parse::<Method>().is_err());
+    }
+
     #[test]
     fn test_method_display_get() {
         assert_eq!(format!("{}", Method::GET), "GET");
