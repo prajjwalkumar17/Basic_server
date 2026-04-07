@@ -31,7 +31,8 @@ impl Server {
     pub fn run(self, mut handler: impl Handler) {
         let listener = TcpListener::bind(&self.addr).unwrap();
         info!(address = %self.addr, "Server listening");
-        
+        info!("Hello from server startup");
+
         loop {
             match listener.accept() {
                 Ok((mut stream, peer_addr)) => {
